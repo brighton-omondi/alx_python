@@ -1,59 +1,44 @@
 import requests
+import sys
 
-def get_employee_todo_list_progress(employee_id):
-    """Gets the employee TODO list progress for the given employee ID.
 
-    Args:
-        employee_id: The employee ID.
+def get_employee_data(employee_id):
+    # Define the API endpoints
+    user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
 
-    Returns:
-        A dictionary containing the employee TODO list progress, with the following keys:
-            "name": The employee name.
-            "done_tasks": The number of completed tasks.
-            "total_tasks": The total number of tasks.
-    """
+    try:
+        # Fetch employee data
+        user_response = requests.get(user_url)
+        user_data = user_response.json()
+        employee_name = user_data.get('name')
 
-    url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(employee_id)
-    response = requests.get(url)
-    response_json = response.json()
+        # Fetch TODO list data
+        todos_response = requests.get(todos_url)
+        todos_data = todos_response.json()
 
-    done_tasks = 0
-    total_tasks = 0
-    for todo in response_json:
-        if todo["completed"]:
-            done_tasks += 1
-        total_tasks += 1
+        # Calculate the number of completed tasks
+        completed_tasks = [task for task in todos_data if task['completed']]
+        num_completed_tasks = len(completed_tasks)
+        total_num_tasks = len(todos_data)
 
-    return {
-        "name": response_json[0]["name"],
-        "done_tasks": done_tasks,
-        "total_tasks": total_tasks,
-    }
+        # Print employee TODO list progress
+        print(
+            f"Employee {employee_name} is done with tasks({num_completed_tasks}/{total_num_tasks}):")
 
-def print_employee_todo_list_progress(employee_todo_list_progress):
-    """Prints the employee TODO list progress in the specified format.
+        # Print titles of completed tasks
+        for task in completed_tasks:
+            print(f"\t{task['title']}")
 
-    Args:
-        employee_todo_list_progress: A dictionary containing the employee TODO list progress, with the following keys:
-            "name": The employee name.
-            "done_tasks": The number of completed tasks.
-            "total_tasks": The total number of tasks.
-    """
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 
-    print("Employee {} is done with tasks({}/{}):".format(
-        employee_todo_list_progress["name"],
-        employee_todo_list_progress["done_tasks"],
-        employee_todo_list_progress["total_tasks"],
-    ))
-
-    for todo in employee_todo_list_progress["todos"]:
-        print("\t{}".format(todo["title"]))
-
-def main():
-    employee_id = int(input("Enter the employee ID: "))
-
-    employee_todo_list_progress = get_employee_todo_list_progress(employee_id)
-    print_employee_todo_list_progress(employee_todo_list_progress)
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <employee_id>")
+        sys.exit(1)
+
+    employee_id = int(sys.argv[1])
+    get_employee_data(employee_id)
