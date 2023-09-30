@@ -25,7 +25,7 @@ def get_employee_data(employee_id):
     todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
 
     try:
-        # Fetch employee data
+        # Fetch user data
         user_response = requests.get(user_url)
         user_data = user_response.json()
         username = user_data.get('username')
@@ -35,21 +35,21 @@ def get_employee_data(employee_id):
         todos_data = todos_response.json()
 
         # Create a list to store tasks for this employee
-        employee_tasks = []
+        user_tasks = []
 
-        # Populate the employee_tasks list
+        # Populate the user_tasks list
         for task in todos_data:
             task_data = {
                 "task": task["title"],
                 "completed": task["completed"],
                 "username": username
             }
-            employee_tasks.append(task_data)
+            user_tasks.append(task_data)
 
         # Write the data to a JSON file named USER_ID.json
         output_file = f"{employee_id}.json"
         with open(output_file, "w") as json_file:
-            json.dump(employee_tasks, json_file)
+            json.dump(user_tasks, json_file)
 
         print(f"Data exported to {output_file}")
 
