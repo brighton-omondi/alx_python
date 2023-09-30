@@ -1,3 +1,19 @@
+"""
+Employee Task Data Exporter
+
+This module retrieves task data for a specific employee from a remote API and exports it to a JSON file.
+
+Usage:
+    python script.py <employee_id>
+
+Example:
+    python script.py 1
+
+Requirements:
+    - requests library (install using 'pip install requests')
+
+"""
+
 import requests
 import sys
 import json
