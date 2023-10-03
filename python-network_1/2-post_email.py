@@ -15,7 +15,6 @@ data = {'email': email}
 try:
     response = requests.post(url, data=data)
     if response.status_code == 200:
-        print("Your email is:", email)
         print(response.text)
     else:
         print(
