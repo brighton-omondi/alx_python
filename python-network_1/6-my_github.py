@@ -14,7 +14,7 @@ url = "https://api.github.com/user"
 
 # Set up the Basic Authentication header using your personal access token
 headers = {
-    "Authorization": f"Basic {username}:{personal_access_token}"
+    "Authorization": f"Basic {brighton-omondi}:{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}"
 }
 
 try:
