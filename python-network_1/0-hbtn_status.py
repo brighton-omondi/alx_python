@@ -1,15 +1,19 @@
 import requests
-
 """
     Fetches the content of the given URL and displays it with tabulation.
 
     Args:
     url (str): The URL to fetch the content from.
-"""
+    """
 
 
 def fetch_and_display_status(url):
+    """
+    Fetches the content of the given URL and displays it with tabulation.
 
+    Args:
+    url (str): The URL to fetch the content from.
+    """
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for any HTTP error status codes
